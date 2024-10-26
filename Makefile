@@ -19,3 +19,7 @@ lint:
 test:
 	go test ./...
 .PHONY: test
+
+generate:
+	go generate ./...
+.PHONY: generate
