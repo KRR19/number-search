@@ -38,7 +38,9 @@ func (s *Service) SearchNumber(ctx context.Context, target int) (int, error) {
 }
 
 func (s *Service) numberPosition(list []int, target int) int {
-	for l, r := 0, len(list)-1; l <= r; {
+	precision := 10
+	l, r := 0, len(list)-1
+	for l <= r {
 		m := l + (r-l)/2
 
 		if list[m] == target {
@@ -52,5 +54,21 @@ func (s *Service) numberPosition(list []int, target int) int {
 		}
 	}
 
+	if s.targetInRange(list[l-1], target*(100-precision)/100, target) {
+		s.log.Warn("number not found, but found the closest one", "number", target, "closest", list[l-1])
+
+		return l-1
+	}
+
+	if s.targetInRange(list[r+1], target, target*(100+precision)/100) {
+		s.log.Warn("number not found, but found the closest one", "number", target, "closest", list[r+1])
+
+		return r+1
+	}
+	
 	return -1
+}
+
+func (s *Service) targetInRange(target, min, max int) bool {
+	return target >= min && target <= max
 }

@@ -49,7 +49,7 @@ func TestSearchNumber(t *testing.T) {
 
 	t.Run("NumberNotFound", func(t *testing.T) {
 		t.Parallel()
-		test.store.EXPECT().SortedNumbers().Return([]int{1, 2, 4, 5, 7, 8}, nil)
+		test.store.EXPECT().SortedNumbers().Return([]int{1, 20, 40, 55, 100}, nil)
 		_, err := test.service.SearchNumber(ctx, 3)
 		assert.Error(t, err)
 		assert.Equal(t, numbersearch.ErrNumberNotFound, err)
@@ -60,5 +60,21 @@ func TestSearchNumber(t *testing.T) {
 		test.store.EXPECT().SortedNumbers().Return(nil, assert.AnError)
 		_, err := test.service.SearchNumber(ctx, 3)
 		assert.Error(t, err)
+	})
+
+	t.Run("NumberCloseToTargetL", func(t *testing.T) {
+		t.Parallel()
+		test.store.EXPECT().SortedNumbers().Return([]int{1000, 1100, 1200, 1300, 1400}, nil)
+		i, err := test.service.SearchNumber(ctx, 1150)
+		assert.NoError(t, err)
+		assert.Equal(t, 1, i)
+	})
+	
+	t.Run("NumberCloseToTargetR", func(t *testing.T) {
+		t.Parallel()
+		test.store.EXPECT().SortedNumbers().Return([]int{900, 1000, 1200, 1300, 1400}, nil)
+		i, err := test.service.SearchNumber(ctx, 1150)
+		assert.NoError(t, err)
+		assert.Equal(t, 2, i)
 	})
 }
