@@ -8,25 +8,20 @@ import (
 	v1 "github.com/KRR19/number-search/internal/infra/http/v1"
 )
 
-type CustomHandler struct{}
-
-func (h *CustomHandler) Enabled() bool                    { return true }
-func (h *CustomHandler) Log(level slog.Level, msg string) {}
-
 type Application struct {
 	mux    *http.ServeMux
 	logger *slog.Logger
 }
 
 func NewApplication() *Application {
-	loger := newLogger()
+	logger := newLogger()
 
-	v1Handler := v1.NewHandler()
+	v1Handler := v1.NewHandler(logger)
 
 	mux := createHandlerMux(v1Handler)
 
 	return &Application{
-		logger: loger,
+		logger: logger,
 		mux:    mux,
 	}
 }

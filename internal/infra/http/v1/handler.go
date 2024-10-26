@@ -1,16 +1,24 @@
 package v1
 
-import "net/http"
+import (
+	"log/slog"
+	"net/http"
+)
 
 type Handler struct {
+	logger *slog.Logger
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(logger *slog.Logger) *Handler {
+	return &Handler{
+		logger: logger,
+	}
 }
 
 func (h *Handler) GetNumberPosition(w http.ResponseWriter, r *http.Request) {
 	v := r.PathValue("number")
 
-	w.Write([]byte(v))
+	if _, err := w.Write([]byte(v)); err != nil {
+		h.logger.Error("error writing response", "error", err)
+	}
 }
