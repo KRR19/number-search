@@ -2,17 +2,16 @@ package numbersearch
 
 import (
 	"context"
-	"log/slog"
 
 	"github.com/pkg/errors"
 )
 
 type Service struct {
-	log   *slog.Logger
+	log   Logger
 	store Store
 }
 
-func NewService(log *slog.Logger, store Store) *Service {
+func NewService(log Logger, store Store) *Service {
 	return &Service{
 		log:   log,
 		store: store,
@@ -27,17 +26,19 @@ func (s *Service) SearchNumber(ctx context.Context, target int) (int, error) {
 		return -1, errors.Wrap(err, "error getting sorted numbers")
 	}
 
-	r := s.numberPosition(list, target)
+	r := s.numberPosition(ctx, list, target)
 	if r == -1 {
 		s.log.WarnContext(ctx, "number not found", "number", target)
 
 		return -1, ErrNumberNotFound
 	}
 
+	s.log.InfoContext(ctx, "number found", "number", target, "position", r)
+
 	return r, nil
 }
 
-func (s *Service) numberPosition(list []int, target int) int {
+func (s *Service) numberPosition(ctx context.Context, list []int, target int) int {
 	precision := 10
 	l, r := 0, len(list)-1
 	for l <= r {
@@ -54,18 +55,18 @@ func (s *Service) numberPosition(list []int, target int) int {
 		}
 	}
 
-	if s.targetInRange(list[l-1], target*(100-precision)/100, target) {
-		s.log.Warn("number not found, but found the closest one", "number", target, "closest", list[l-1])
+	if l != 0 && s.targetInRange(list[l-1], target*(100-precision)/100, target) {
+		s.log.WarnContext(ctx, "number not found, but found the closest one", "number", target, "closest", list[l-1])
 
-		return l-1
+		return l - 1
 	}
 
-	if s.targetInRange(list[r+1], target, target*(100+precision)/100) {
-		s.log.Warn("number not found, but found the closest one", "number", target, "closest", list[r+1])
+	if r < len(list)-1 && s.targetInRange(list[r+1], target, target*(100+precision)/100) {
+		s.log.WarnContext(ctx, "number not found, but found the closest one", "number", target, "closest", list[r+1])
 
-		return r+1
+		return r + 1
 	}
-	
+
 	return -1
 }
 

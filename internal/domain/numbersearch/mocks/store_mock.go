@@ -5,36 +5,37 @@
 package mocks
 
 import (
+	context "context"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockStore is a mock of Store interface.
-type MockStore struct {
+// StoreMock is a mock of Store interface.
+type StoreMock struct {
 	ctrl     *gomock.Controller
-	recorder *MockStoreMockRecorder
+	recorder *StoreMockMockRecorder
 }
 
-// MockStoreMockRecorder is the mock recorder for MockStore.
-type MockStoreMockRecorder struct {
-	mock *MockStore
+// StoreMockMockRecorder is the mock recorder for StoreMock.
+type StoreMockMockRecorder struct {
+	mock *StoreMock
 }
 
-// NewMockStore creates a new mock instance.
-func NewMockStore(ctrl *gomock.Controller) *MockStore {
-	mock := &MockStore{ctrl: ctrl}
-	mock.recorder = &MockStoreMockRecorder{mock}
+// NewStoreMock creates a new mock instance.
+func NewStoreMock(ctrl *gomock.Controller) *StoreMock {
+	mock := &StoreMock{ctrl: ctrl}
+	mock.recorder = &StoreMockMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockStore) EXPECT() *MockStoreMockRecorder {
+func (m *StoreMock) EXPECT() *StoreMockMockRecorder {
 	return m.recorder
 }
 
 // SortedNumbers mocks base method.
-func (m *MockStore) SortedNumbers() ([]int, error) {
+func (m *StoreMock) SortedNumbers() ([]int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SortedNumbers")
 	ret0, _ := ret[0].([]int)
@@ -43,7 +44,81 @@ func (m *MockStore) SortedNumbers() ([]int, error) {
 }
 
 // SortedNumbers indicates an expected call of SortedNumbers.
-func (mr *MockStoreMockRecorder) SortedNumbers() *gomock.Call {
+func (mr *StoreMockMockRecorder) SortedNumbers() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SortedNumbers", reflect.TypeOf((*MockStore)(nil).SortedNumbers))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SortedNumbers", reflect.TypeOf((*StoreMock)(nil).SortedNumbers))
+}
+
+// MockLogger is a mock of Logger interface.
+type MockLogger struct {
+	ctrl     *gomock.Controller
+	recorder *MockLoggerMockRecorder
+}
+
+// MockLoggerMockRecorder is the mock recorder for MockLogger.
+type MockLoggerMockRecorder struct {
+	mock *MockLogger
+}
+
+// NewMockLogger creates a new mock instance.
+func NewMockLogger(ctrl *gomock.Controller) *MockLogger {
+	mock := &MockLogger{ctrl: ctrl}
+	mock.recorder = &MockLoggerMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockLogger) EXPECT() *MockLoggerMockRecorder {
+	return m.recorder
+}
+
+// ErrorContext mocks base method.
+func (m *MockLogger) ErrorContext(ctx context.Context, msg string, args ...any) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, msg}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	m.ctrl.Call(m, "ErrorContext", varargs...)
+}
+
+// ErrorContext indicates an expected call of ErrorContext.
+func (mr *MockLoggerMockRecorder) ErrorContext(ctx, msg interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, msg}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ErrorContext", reflect.TypeOf((*MockLogger)(nil).ErrorContext), varargs...)
+}
+
+// InfoContext mocks base method.
+func (m *MockLogger) InfoContext(ctx context.Context, msg string, args ...any) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, msg}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	m.ctrl.Call(m, "InfoContext", varargs...)
+}
+
+// InfoContext indicates an expected call of InfoContext.
+func (mr *MockLoggerMockRecorder) InfoContext(ctx, msg interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, msg}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InfoContext", reflect.TypeOf((*MockLogger)(nil).InfoContext), varargs...)
+}
+
+// WarnContext mocks base method.
+func (m *MockLogger) WarnContext(ctx context.Context, msg string, args ...any) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, msg}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	m.ctrl.Call(m, "WarnContext", varargs...)
+}
+
+// WarnContext indicates an expected call of WarnContext.
+func (mr *MockLoggerMockRecorder) WarnContext(ctx, msg interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, msg}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WarnContext", reflect.TypeOf((*MockLogger)(nil).WarnContext), varargs...)
 }
