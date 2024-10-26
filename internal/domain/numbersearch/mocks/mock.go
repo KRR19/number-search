@@ -11,31 +11,31 @@ import (
 	gomock "github.com/golang/mock/gomock"
 )
 
-// StoreMock is a mock of Store interface.
-type StoreMock struct {
+// MockStore is a mock of Store interface.
+type MockStore struct {
 	ctrl     *gomock.Controller
-	recorder *StoreMockMockRecorder
+	recorder *MockStoreMockRecorder
 }
 
-// StoreMockMockRecorder is the mock recorder for StoreMock.
-type StoreMockMockRecorder struct {
-	mock *StoreMock
+// MockStoreMockRecorder is the mock recorder for MockStore.
+type MockStoreMockRecorder struct {
+	mock *MockStore
 }
 
-// NewStoreMock creates a new mock instance.
-func NewStoreMock(ctrl *gomock.Controller) *StoreMock {
-	mock := &StoreMock{ctrl: ctrl}
-	mock.recorder = &StoreMockMockRecorder{mock}
+// NewMockStore creates a new mock instance.
+func NewMockStore(ctrl *gomock.Controller) *MockStore {
+	mock := &MockStore{ctrl: ctrl}
+	mock.recorder = &MockStoreMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *StoreMock) EXPECT() *StoreMockMockRecorder {
+func (m *MockStore) EXPECT() *MockStoreMockRecorder {
 	return m.recorder
 }
 
 // SortedNumbers mocks base method.
-func (m *StoreMock) SortedNumbers() ([]int, error) {
+func (m *MockStore) SortedNumbers() ([]int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SortedNumbers")
 	ret0, _ := ret[0].([]int)
@@ -44,9 +44,9 @@ func (m *StoreMock) SortedNumbers() ([]int, error) {
 }
 
 // SortedNumbers indicates an expected call of SortedNumbers.
-func (mr *StoreMockMockRecorder) SortedNumbers() *gomock.Call {
+func (mr *MockStoreMockRecorder) SortedNumbers() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SortedNumbers", reflect.TypeOf((*StoreMock)(nil).SortedNumbers))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SortedNumbers", reflect.TypeOf((*MockStore)(nil).SortedNumbers))
 }
 
 // MockLogger is a mock of Logger interface.
@@ -121,4 +121,41 @@ func (mr *MockLoggerMockRecorder) WarnContext(ctx, msg interface{}, args ...inte
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, msg}, args...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WarnContext", reflect.TypeOf((*MockLogger)(nil).WarnContext), varargs...)
+}
+
+// MockConfig is a mock of Config interface.
+type MockConfig struct {
+	ctrl     *gomock.Controller
+	recorder *MockConfigMockRecorder
+}
+
+// MockConfigMockRecorder is the mock recorder for MockConfig.
+type MockConfigMockRecorder struct {
+	mock *MockConfig
+}
+
+// NewMockConfig creates a new mock instance.
+func NewMockConfig(ctrl *gomock.Controller) *MockConfig {
+	mock := &MockConfig{ctrl: ctrl}
+	mock.recorder = &MockConfigMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockConfig) EXPECT() *MockConfigMockRecorder {
+	return m.recorder
+}
+
+// Precision mocks base method.
+func (m *MockConfig) Precision() int {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Precision")
+	ret0, _ := ret[0].(int)
+	return ret0
+}
+
+// Precision indicates an expected call of Precision.
+func (mr *MockConfigMockRecorder) Precision() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Precision", reflect.TypeOf((*MockConfig)(nil).Precision))
 }

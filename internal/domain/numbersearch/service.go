@@ -9,12 +9,14 @@ import (
 type Service struct {
 	log   Logger
 	store Store
+	cfg   Config
 }
 
-func NewService(log Logger, store Store) *Service {
+func NewService(log Logger, store Store, cfg Config) *Service {
 	return &Service{
 		log:   log,
 		store: store,
+		cfg:   cfg,
 	}
 }
 
@@ -39,7 +41,7 @@ func (s *Service) SearchNumber(ctx context.Context, target int) (int, error) {
 }
 
 func (s *Service) numberPosition(ctx context.Context, list []int, target int) int {
-	precision := 10
+	precision := s.cfg.Precision()
 	l, r := 0, len(list)-1
 	for l <= r {
 		m := l + (r-l)/2
