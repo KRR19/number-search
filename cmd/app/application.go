@@ -28,9 +28,9 @@ func NewApplication() *Application {
 		panic(err)
 	}
 
-	_ = numbersearch.NewService(logger, store, cfg)
+	ns := numbersearch.NewService(logger, store, cfg)
 
-	v1Handler := v1.NewHandler(logger)
+	v1Handler := v1.NewHandler(logger, ns)
 
 	mux := createHandlerMux(v1Handler)
 
