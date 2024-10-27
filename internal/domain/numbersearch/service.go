@@ -28,6 +28,12 @@ func (s *Service) SearchNumber(ctx context.Context, target int) (int, error) {
 		return -1, errors.Wrap(err, "error getting sorted numbers")
 	}
 
+	if len(list) == 0 {
+		s.log.ErrorContext(ctx, "empty list")
+
+		return -1, ErrEmptyList
+	}
+
 	r := s.numberPosition(ctx, list, target)
 	if r == -1 {
 		s.log.WarnContext(ctx, "number not found", "number", target)
