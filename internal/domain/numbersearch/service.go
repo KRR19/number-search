@@ -6,6 +6,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+
+
 type Service struct {
 	log   Logger
 	store Store
@@ -44,6 +46,40 @@ func (s *Service) SearchNumber(ctx context.Context, target int) (int, error) {
 	s.log.InfoContext(ctx, "number found", "number", target, "position", r)
 
 	return r, nil
+}
+
+func (s *Service) SearchNumberV2(ctx context.Context, target int) (int, error) {
+	const step = 100
+
+	if target%step == 0 {
+		p := target / step
+		s.log.InfoContext(ctx, "number found", "number", target, "position", p)
+
+		return p, nil
+	}
+
+	diff := (target/step+1)*step - target
+	persentege := s.cfg.Variation() / 100
+
+	if diff <= 1000000 && float64(diff) <= float64(target)*persentege {
+		p := target/step+1
+		s.log.InfoContext(ctx, "number found", "number", target, "position", p)
+
+		return p, nil
+	}
+
+	diff = target - (target/step)*step
+
+	if diff >= 0 && float64(diff) <= float64(target)*persentege {
+		p := target / step
+		s.log.InfoContext(ctx, "number found", "number", target, "position", p)
+
+		return p, nil
+	}
+
+	s.log.WarnContext(ctx, "number not found", "number", target)
+
+	return -1, ErrNumberNotFound
 }
 
 func (s *Service) numberPosition(ctx context.Context, list []int, target int) int {

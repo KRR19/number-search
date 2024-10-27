@@ -192,3 +192,59 @@ func TestSearchNumber(t *testing.T) {
 		assert.Equal(t, 0, i)
 	})
 }
+
+func TestSearchNumberV2(t *testing.T) {
+    t.Run("NumberFoundExactStep", func(t *testing.T) {
+        t.Parallel()
+        test := NewTest(t)
+        defer test.ctrl.Finish()
+        ctx := context.TODO()
+
+        i, err := test.service.SearchNumberV2(ctx, 200)
+
+        assert.NoError(t, err)
+        assert.Equal(t, 2, i)
+    })
+
+    t.Run("NumberFoundCloseToNextStep", func(t *testing.T) {
+        t.Parallel()
+        test := NewTest(t)
+        defer test.ctrl.Finish()
+        ctx := context.TODO()
+
+        test.cfg.EXPECT().Variation().Return(10.0)
+
+        i, err := test.service.SearchNumberV2(ctx, 195)
+
+        assert.NoError(t, err)
+        assert.Equal(t, 2, i)
+    })
+
+    t.Run("NumberFoundCloseToPreviousStep", func(t *testing.T) {
+        t.Parallel()
+        test := NewTest(t)
+        defer test.ctrl.Finish()
+        ctx := context.TODO()
+
+        test.cfg.EXPECT().Variation().Return(10.0)
+
+        i, err := test.service.SearchNumberV2(ctx, 105)
+
+        assert.NoError(t, err)
+        assert.Equal(t, 1, i)
+    })
+
+    t.Run("NumberNotFound", func(t *testing.T) {
+        t.Parallel()
+        test := NewTest(t)
+        defer test.ctrl.Finish()
+        ctx := context.TODO()
+
+        test.cfg.EXPECT().Variation().Return(10.0)
+
+        _, err := test.service.SearchNumberV2(ctx, 250)
+
+        assert.Error(t, err)
+        assert.Equal(t, numbersearch.ErrNumberNotFound, err)
+    })
+}

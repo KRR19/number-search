@@ -8,7 +8,7 @@ import (
 	"github.com/KRR19/number-search/internal/domain/numbersearch"
 	"github.com/KRR19/number-search/internal/infra/config"
 	"github.com/KRR19/number-search/internal/infra/filestore"
-	v1 "github.com/KRR19/number-search/internal/infra/http/v1"
+	"github.com/KRR19/number-search/internal/infra/rest"
 	"github.com/spf13/viper"
 )
 
@@ -30,9 +30,9 @@ func NewApplication() *Application {
 
 	ns := numbersearch.NewService(logger, store, cfg)
 
-	v1Handler := v1.NewHandler(logger, ns)
+	handler := rest.NewHandler(logger, ns)
 
-	mux := createHandlerMux(v1Handler)
+	mux := createHandlerMux(handler)
 
 	return &Application{
 		logger: logger,
@@ -69,9 +69,10 @@ func newLogger(logLevel string) *slog.Logger {
 	return logger
 }
 
-func createHandlerMux(v1Handler *v1.Handler) *http.ServeMux {
+func createHandlerMux(handler *rest.Handler) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc(v1.GetNumberPositionPath, v1Handler.GetNumberPosition)
+	mux.HandleFunc(rest.V1GetNumberPositionPath, handler.GetNumberPosition)
+	mux.HandleFunc(rest.V2GetNumberPositionPath, handler.V2GetNumberPosition)
 	return mux
 }
 

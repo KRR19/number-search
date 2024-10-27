@@ -1,4 +1,4 @@
-package v1
+package rest
 
 type GetNumberPositionResponse struct {
 	Position int     `json:"position"`

@@ -1,4 +1,4 @@
-package v1
+package rest
 
 import (
 	"encoding/json"
@@ -30,6 +30,19 @@ func (h *Handler) GetNumberPosition(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res, err := h.numbersearch.SearchNumber(r.Context(), v)
+
+	h.numberPositionResponse(w, res, err)
+
+}
+
+func (h *Handler) V2GetNumberPosition(w http.ResponseWriter, r *http.Request) {
+	v, err := strconv.Atoi(r.PathValue("number"))
+	if err != nil {
+		h.numberPositionResponse(w, -1, ErrInvalidNumber)
+		return
+	}
+
+	res, err := h.numbersearch.SearchNumberV2(r.Context(), v)
 
 	h.numberPositionResponse(w, res, err)
 
