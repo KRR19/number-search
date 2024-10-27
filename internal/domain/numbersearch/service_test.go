@@ -168,10 +168,10 @@ func TestSearchNumber(t *testing.T) {
 		defer test.ctrl.Finish()
 		ctx := context.TODO()
 
-		test.store.EXPECT().SortedNumbers().Return([]int{10}, nil)
+		test.store.EXPECT().SortedNumbers().Return([]int{12}, nil)
 		test.cfg.EXPECT().Variation().Return(10.0)
 
-		i, err := test.service.SearchNumber(ctx, 11)
+		i, err := test.service.SearchNumber(ctx, 13)
 
 		assert.NoError(t, err)
 		assert.Equal(t, 0, i)
@@ -183,10 +183,10 @@ func TestSearchNumber(t *testing.T) {
 		defer test.ctrl.Finish()
 		ctx := context.TODO()
 
-		test.store.EXPECT().SortedNumbers().Return([]int{10}, nil)
+		test.store.EXPECT().SortedNumbers().Return([]int{12}, nil)
 		test.cfg.EXPECT().Variation().Return(10.0)
 
-		i, err := test.service.SearchNumber(ctx, 9)
+		i, err := test.service.SearchNumber(ctx, 11)
 
 		assert.NoError(t, err)
 		assert.Equal(t, 0, i)

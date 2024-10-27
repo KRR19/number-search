@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/KRR19/number-search/internal/domain/numbersearch"
 	"github.com/KRR19/number-search/internal/infra/config"
+	"github.com/KRR19/number-search/internal/infra/filestore"
 	v1 "github.com/KRR19/number-search/internal/infra/http/v1"
 	"github.com/spf13/viper"
 )
@@ -20,6 +22,13 @@ func NewApplication() *Application {
 	cfg := newConfig()
 
 	logger := newLogger(cfg.LogLevel())
+
+	store := filestore.NewStore()
+	if err := store.ReadFromFile("../input.txt"); err != nil {
+		panic(err)
+	}
+
+	_ = numbersearch.NewService(logger, store, cfg)
 
 	v1Handler := v1.NewHandler(logger)
 
