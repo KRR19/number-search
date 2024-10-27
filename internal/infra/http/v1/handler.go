@@ -25,17 +25,17 @@ func NewHandler(logger *slog.Logger, numbersearch *numbersearch.Service) *Handle
 func (h *Handler) GetNumberPosition(w http.ResponseWriter, r *http.Request) {
 	v, err := strconv.Atoi(r.PathValue("number"))
 	if err != nil {
-		NumberPositionResponse(w, -1, ErrInvalidNumber)
+		h.numberPositionResponse(w, -1, ErrInvalidNumber)
 		return
 	}
 
 	res, err := h.numbersearch.SearchNumber(r.Context(), v)
 
-	NumberPositionResponse(w, res, err)
+	h.numberPositionResponse(w, res, err)
 
 }
 
-func NumberPositionResponse(w http.ResponseWriter, position int, err error) {
+func (h *Handler) numberPositionResponse(w http.ResponseWriter, position int, err error) {
 	status := http.StatusOK
 	var er *string
 
@@ -61,5 +61,7 @@ func NumberPositionResponse(w http.ResponseWriter, position int, err error) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(res)
+	if err = json.NewEncoder(w).Encode(res); err != nil {
+		h.logger.Error("failed to encode response", slog.String("error", err.Error()))
+	}
 }

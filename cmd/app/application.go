@@ -24,7 +24,7 @@ func NewApplication() *Application {
 	logger := newLogger(cfg.LogLevel())
 
 	store := filestore.NewStore()
-	if err := store.ReadFromFile("../input.txt"); err != nil {
+	if err := store.ReadFromFile(cfg.FilePath()); err != nil {
 		panic(err)
 	}
 
@@ -77,12 +77,23 @@ func createHandlerMux(v1Handler *v1.Handler) *http.ServeMux {
 
 func newConfig() *config.Config {
 	vp := viper.New()
-	vp.SetConfigFile("../.env")
-	_ = vp.ReadInConfig()
+	var filePath string
+	fileName := ".env"
+	if _, err := os.Stat("../" + fileName); !os.IsNotExist(err) {
+		filePath = "../" + fileName
+	} else if _, err := os.Stat("./" + fileName); !os.IsNotExist(err) {
+		filePath = fileName
+	}
 
-	vp.SetDefault("PORT", os.Getenv("PORT"))
-	vp.SetDefault("LOG_LEVEL", os.Getenv("LOG_LEVEL"))
-	vp.SetDefault("VARIATION", os.Getenv("VARIATION"))
+	if filePath != "" {
+		vp.SetConfigFile(filePath)
+		_ = vp.ReadInConfig()
+	} else {
+		vp.SetDefault("PORT", os.Getenv("PORT"))
+		vp.SetDefault("LOG_LEVEL", os.Getenv("LOG_LEVEL"))
+		vp.SetDefault("VARIATION", os.Getenv("VARIATION"))
+		vp.SetDefault("FILE_PATH", os.Getenv("FILE_PATH"))
+	}
 
 	cfg := config.NewConfig(vp)
 	return cfg

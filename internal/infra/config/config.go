@@ -21,3 +21,7 @@ func (c *Config) Port() string {
 func (c *Config) LogLevel() string {
 	return c.source.GetString("LOG_LEVEL")
 }
+
+func (c *Config) FilePath() string {
+	return c.source.GetString("FILE_PATH")
+}

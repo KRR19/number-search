@@ -1,7 +1,7 @@
 SRCMAIN = ./cmd/main.go
 
 run:
-	go run ${SRCMAIN}
+	PORT=":8080" LOG_LEVEL=info VARIATION=10 FILE_PATH="./input.txt" go run ${SRCMAIN}
 .PHONY: run
 
 build:
