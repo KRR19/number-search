@@ -78,7 +78,7 @@ func createHandlerMux(v1Handler *v1.Handler) *http.ServeMux {
 func newConfig() *config.Config {
 	vp := viper.New()
 	vp.SetConfigFile("../.env")
-	vp.ReadInConfig()
+	_ = vp.ReadInConfig()
 
 	vp.SetDefault("PORT", os.Getenv("PORT"))
 	vp.SetDefault("LOG_LEVEL", os.Getenv("LOG_LEVEL"))
