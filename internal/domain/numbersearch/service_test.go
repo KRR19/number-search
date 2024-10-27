@@ -132,4 +132,63 @@ func TestSearchNumber(t *testing.T) {
 		assert.Error(t, err)
 		assert.Equal(t, numbersearch.ErrEmptyList, err)
 	})
+
+	t.Run("SingleElementListFound", func(t *testing.T) {
+		t.Parallel()
+		test := NewTest(t)
+		defer test.ctrl.Finish()
+		ctx := context.TODO()
+
+		test.store.EXPECT().SortedNumbers().Return([]int{3}, nil)
+
+		i, err := test.service.SearchNumber(ctx, 3)
+
+		assert.NoError(t, err)
+		assert.Equal(t, 0, i)
+	})
+
+	t.Run("SingleElementListNotFound", func(t *testing.T) {
+		t.Parallel()
+		test := NewTest(t)
+		defer test.ctrl.Finish()
+		ctx := context.TODO()
+
+		test.store.EXPECT().SortedNumbers().Return([]int{5}, nil)
+		test.cfg.EXPECT().Precision().Return(10.0)
+
+		_, err := test.service.SearchNumber(ctx, 3)
+
+		assert.Error(t, err)
+		assert.Equal(t, numbersearch.ErrNumberNotFound, err)
+	})
+
+	t.Run("SingleElementListCloseToTarget", func(t *testing.T) {
+		t.Parallel()
+		test := NewTest(t)
+		defer test.ctrl.Finish()
+		ctx := context.TODO()
+
+		test.store.EXPECT().SortedNumbers().Return([]int{10}, nil)
+		test.cfg.EXPECT().Precision().Return(10.0)
+
+		i, err := test.service.SearchNumber(ctx, 11)
+
+		assert.NoError(t, err)
+		assert.Equal(t, 0, i)
+	})
+
+	t.Run("SingleElementListCloseToTarget", func(t *testing.T) {
+		t.Parallel()
+		test := NewTest(t)
+		defer test.ctrl.Finish()
+		ctx := context.TODO()
+
+		test.store.EXPECT().SortedNumbers().Return([]int{10}, nil)
+		test.cfg.EXPECT().Precision().Return(10.0)
+
+		i, err := test.service.SearchNumber(ctx, 9)
+
+		assert.NoError(t, err)
+		assert.Equal(t, 0, i)
+	})
 }
