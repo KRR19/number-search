@@ -10,7 +10,6 @@ RUN make build
 # Runtime stage
 FROM alpine:3.18
 
-# Create non-root user
 RUN adduser -D -g '' appuser
 
 WORKDIR /app
