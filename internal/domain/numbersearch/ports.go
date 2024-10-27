@@ -2,7 +2,7 @@ package numbersearch
 
 import "context"
 
-//go:generate mockgen -source=ports.go -destination=./mocks/mock.go -package=mocks 
+//go:generate mockgen -source=ports.go -destination=./mocks/mock.go -package=mocks
 type Store interface {
 	SortedNumbers() ([]int, error)
 }
@@ -14,5 +14,5 @@ type Logger interface {
 }
 
 type Config interface {
-	Precision() float64
+	Variation() float64
 }

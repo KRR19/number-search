@@ -5,7 +5,7 @@ run:
 .PHONY: run
 
 build:
-	go build -o number-search ${SRCMAIN}
+	go build -o bin/number-search ${SRCMAIN}
 .PHONY: build
 
 fmt:

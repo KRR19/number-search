@@ -146,16 +146,16 @@ func (m *MockConfig) EXPECT() *MockConfigMockRecorder {
 	return m.recorder
 }
 
-// Precision mocks base method.
-func (m *MockConfig) Precision() float64 {
+// Variation mocks base method.
+func (m *MockConfig) Variation() float64 {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Precision")
+	ret := m.ctrl.Call(m, "VARIATION")
 	ret0, _ := ret[0].(float64)
 	return ret0
 }
 
-// Precision indicates an expected call of Precision.
-func (mr *MockConfigMockRecorder) Precision() *gomock.Call {
+// Variation indicates an expected call of Variation.
+func (mr *MockConfigMockRecorder) Variation() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Precision", reflect.TypeOf((*MockConfig)(nil).Precision))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VARIATION", reflect.TypeOf((*MockConfig)(nil).Variation))
 }

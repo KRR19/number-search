@@ -69,7 +69,7 @@ func TestSearchNumber(t *testing.T) {
 		ctx := context.TODO()
 
 		test.store.EXPECT().SortedNumbers().Return([]int{1, 20, 40, 55, 100}, nil)
-		test.cfg.EXPECT().Precision().Return(10.0)
+		test.cfg.EXPECT().Variation().Return(10.0)
 
 		_, err := test.service.SearchNumber(ctx, 3)
 
@@ -96,7 +96,7 @@ func TestSearchNumber(t *testing.T) {
 		ctx := context.TODO()
 
 		test.store.EXPECT().SortedNumbers().Return([]int{1000, 1100, 1270, 1300, 1400}, nil)
-		test.cfg.EXPECT().Precision().Return(10.0)
+		test.cfg.EXPECT().Variation().Return(10.0)
 
 		i, err := test.service.SearchNumber(ctx, 1150)
 
@@ -111,7 +111,7 @@ func TestSearchNumber(t *testing.T) {
 		ctx := context.TODO()
 
 		test.store.EXPECT().SortedNumbers().Return([]int{900, 1000, 1200, 1300, 1400}, nil)
-		test.cfg.EXPECT().Precision().Return(10.0)
+		test.cfg.EXPECT().Variation().Return(10.0)
 
 		i, err := test.service.SearchNumber(ctx, 1150)
 
@@ -154,7 +154,7 @@ func TestSearchNumber(t *testing.T) {
 		ctx := context.TODO()
 
 		test.store.EXPECT().SortedNumbers().Return([]int{5}, nil)
-		test.cfg.EXPECT().Precision().Return(10.0)
+		test.cfg.EXPECT().Variation().Return(10.0)
 
 		_, err := test.service.SearchNumber(ctx, 3)
 
@@ -169,7 +169,7 @@ func TestSearchNumber(t *testing.T) {
 		ctx := context.TODO()
 
 		test.store.EXPECT().SortedNumbers().Return([]int{10}, nil)
-		test.cfg.EXPECT().Precision().Return(10.0)
+		test.cfg.EXPECT().Variation().Return(10.0)
 
 		i, err := test.service.SearchNumber(ctx, 11)
 
@@ -184,7 +184,7 @@ func TestSearchNumber(t *testing.T) {
 		ctx := context.TODO()
 
 		test.store.EXPECT().SortedNumbers().Return([]int{10}, nil)
-		test.cfg.EXPECT().Precision().Return(10.0)
+		test.cfg.EXPECT().Variation().Return(10.0)
 
 		i, err := test.service.SearchNumber(ctx, 9)
 

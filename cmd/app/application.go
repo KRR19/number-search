@@ -5,16 +5,21 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/KRR19/number-search/internal/infra/config"
 	v1 "github.com/KRR19/number-search/internal/infra/http/v1"
+	"github.com/spf13/viper"
 )
 
 type Application struct {
 	mux    *http.ServeMux
 	logger *slog.Logger
+	cfg    *config.Config
 }
 
 func NewApplication() *Application {
-	logger := newLogger()
+	cfg := newConfig()
+
+	logger := newLogger(cfg.LogLevel())
 
 	v1Handler := v1.NewHandler(logger)
 
@@ -23,18 +28,33 @@ func NewApplication() *Application {
 	return &Application{
 		logger: logger,
 		mux:    mux,
+		cfg:    cfg,
 	}
 }
 
 func (a *Application) ServeHTTP() error {
-	port := ":8080"
-	a.logger.Info("starting http server on port " + port)
+	port := a.cfg.Port()
+	a.logger.Info("starting http server on port" + port)
 
 	return http.ListenAndServe(port, a.mux)
 }
 
-func newLogger() *slog.Logger {
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+func newLogger(logLevel string) *slog.Logger {
+	var level slog.Level
+	switch logLevel {
+	case "debug":
+		level = slog.LevelDebug
+	case "info":
+		level = slog.LevelInfo
+	case "warning":
+		level = slog.LevelWarn
+	case "error":
+		level = slog.LevelError
+	default:
+		level = slog.LevelInfo
+	}
+
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: level}))
 	slog.SetDefault(logger)
 
 	return logger
@@ -44,4 +64,17 @@ func createHandlerMux(v1Handler *v1.Handler) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc(v1.GetNumberPositionPath, v1Handler.GetNumberPosition)
 	return mux
+}
+
+func newConfig() *config.Config {
+	vp := viper.New()
+	vp.SetConfigFile("../.env")
+	vp.ReadInConfig()
+
+	vp.SetDefault("PORT", os.Getenv("PORT"))
+	vp.SetDefault("LOG_LEVEL", os.Getenv("LOG_LEVEL"))
+	vp.SetDefault("VARIATION", os.Getenv("VARIATION"))
+
+	cfg := config.NewConfig(vp)
+	return cfg
 }

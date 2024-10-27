@@ -61,10 +61,10 @@ func (s *Service) numberPosition(ctx context.Context, list []int, target int) in
 			r = m - 1
 		}
 	}
-	precision := s.cfg.Precision()
+	variation := s.cfg.Variation()
 
-	min := float64(target) * (100 - precision) / 100
-	max := float64(target) * (100 + precision) / 100
+	min := float64(target) * (100 - variation) / 100
+	max := float64(target) * (100 + variation) / 100
 
 	if l < len(list) && s.targetInRange(float64(list[l]), min, max) {
 		s.log.WarnContext(ctx, "number not found, but found the closest one", "number", target, "closest", list[l])
