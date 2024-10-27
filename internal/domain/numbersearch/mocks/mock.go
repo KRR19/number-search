@@ -147,10 +147,10 @@ func (m *MockConfig) EXPECT() *MockConfigMockRecorder {
 }
 
 // Precision mocks base method.
-func (m *MockConfig) Precision() int {
+func (m *MockConfig) Precision() float64 {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Precision")
-	ret0, _ := ret[0].(int)
+	ret0, _ := ret[0].(float64)
 	return ret0
 }
 

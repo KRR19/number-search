@@ -14,5 +14,5 @@ type Logger interface {
 }
 
 type Config interface {
-	Precision() int
+	Precision() float64
 }
